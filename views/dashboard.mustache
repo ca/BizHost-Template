@@ -1,62 +1,213 @@
 <!DOCTYPE html>
-<html dir="ltr" lang="en-US">
 <head>
 	{{>head}}
 </head>
 
 <body>
-	{{>nav}}
 
-	<div class="row">
-		<div class="col-md-6 col-md-offset-3" style="text-align:center;margin-bottom:48px">
-			<h1>Dashboard Page</h1>
-			<hr />
-			<div class="grey-box">
-				<h3>Purpose</h3>
-				<hr />
-				<p>
-					This is the main user admin console page. Only logged-in users should be able to access this page and the general user-updating functionity should be placed here: change password, username, upload image, etc.
-				</p>
-				<p>
-					Also, app-specific management should happen here as well. For example, if the app allows user to send messages, those messages should show up on this page.
-				</p>
-			</div>
+<!-- Wrapper -->
+<div id="wrapper">
 
-			<div class="grey-box">
-				<h3>Current User</h3>
-				<hr />
-				<p>Update current user details below:</p>
+{{>admin_nav}}
 
-				<form action="/auth/update" method="POST">
-					<input class="form-control" value="{{user.email}}" type="text" name="email" placeholder="Email" /><br />
-					<input class="form-control" value="{{user.username}}" type="text" name="username" placeholder="Username" /><br />
-					<input class="form-control" value="{{user.password}}" type="password" name="password" placeholder="Password" /><br />
-					<input class="form-control" type="hidden" name="id" value="{{user.id}}" />
-					<button type="submit" class="btn btn-info">Update Profile</button>
-				</form>
-			</div>
+<!-- Dashboard -->
+<div id="dashboard">
 
-			<div class="grey-box">
-				<h3>Log Out</h3>
-				<hr />
-				<p>Click the link below to log out. After successfully logging out, app redirects to landing.mustache page.<br /><br /><a class="btn btn-danger" href="/auth/logout">Log Out</a></p>
+	<!-- Navigation
+	================================================== -->
 
-			</div>
+	<!-- Responsive Navigation Trigger -->
+	<a href="#" class="dashboard-responsive-nav-trigger"><i class="fa fa-reorder"></i> Dashboard Navigation</a>
+	
+	<div class="dashboard-nav">
+		<div class="dashboard-nav-inner">
+
+			<ul data-submenu-title="Main">
+				<li><a href="/dashboard"><i class="sl sl-icon-settings"></i> Dashboard</a></li>
+				<li><a href="dashboard-messages.html"><i class="sl sl-icon-envelope-open"></i> Messages <span class="nav-tag messages">2</span></a></li>
+			</ul>
+			
+			<ul data-submenu-title="Listings">
+				<li><a><i class="sl sl-icon-layers"></i> My Listings</a>
+					<ul>
+						<li><a href="dashboard-my-listings.html">Active <span class="nav-tag green">6</span></a></li>
+						<li><a href="dashboard-my-listings.html">Pending <span class="nav-tag yellow">1</span></a></li>
+						<li><a href="dashboard-my-listings.html">Expired <span class="nav-tag red">2</span></a></li>
+					</ul>	
+				</li>
+				<li><a href="dashboard-reviews.html"><i class="sl sl-icon-star"></i> Reviews</a></li>
+				<li><a href="dashboard-bookmarks.html"><i class="sl sl-icon-heart"></i> Favorites</a></li>
+				<li><a href="/listings"><i class="sl sl-icon-plus"></i> Add Listing</a></li>
+			</ul>	
+
+			<ul data-submenu-title="Account">
+				<li class="active"><a href="dashboard-my-profile.html"><i class="sl sl-icon-user"></i> My Profile</a></li>
+				<li><a href="/auth/logout"><i class="sl sl-icon-power"></i> Logout</a></li>
+			</ul>
+
 		</div>
 	</div>
+	<!-- Navigation / End -->
 
 
-  <!-- Turbo library imports: jQuery, Turbo CDN, sample app.js.
-  NOTE: These should be minified in a build script -->
-  <script type="text/javascript" src="/js/jquery.js"></script>
+	<!-- Content
+	================================================== -->
+	<div class="dashboard-content">
 
-  <!-- For file uploading. Remove if file upload not necessry -->
-  <script type="text/javascript" src="/js/dropzone.js"></script> 
+		<!-- Titlebar -->
+		<div id="titlebar">
+			<div class="row">
+				<div class="col-md-12">
+					<h2>My Profile</h2>
+					<!-- Breadcrumbs -->
+					<nav id="breadcrumbs">
+						<ul>
+							<li><a href="#">Home</a></li>
+							<li><a href="#">Dashboard</a></li>
+							<li>My Profile</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
 
-  <!-- Turbo CDN. Better to use CDN than to store locally. -->
-  <script type="text/javascript" src="https://cdn.turbo360-dev.com/dist/turbo.min.js"></script>
+		<div class="row">
 
-  <!-- Your app specific code -->
-  <script type="text/javascript" src="/js/app.js"></script>
+			<!-- Profile -->
+			<div class="col-lg-6 col-md-12">
+				<div class="dashboard-list-box margin-top-0">
+					<h4 class="gray">Profile Details</h4>
+					<div class="dashboard-list-box-static">
+						
+						<!-- Avatar -->
+						<div class="edit-profile-photo">
+							{{#user.image}}
+							<img src="{{ user.image }}" alt="" id="user-image">
+							{{/user.image}}
+
+
+
+							<div class="change-photo-btn">
+								<div class="photoUpload">
+								    <span><i class="fa fa-upload"></i> Upload Photo</span>
+								    <input type="file" class="upload" id="btn-file-select" />
+								</div>
+							</div>
+						</div>
+	
+						<!-- Details -->
+						<form method="post" action="/auth/update">
+							<div class="my-profile">
+
+								<label>Your Name</label>
+								<input value="{{ user.name }}" name="name" type="text">
+
+								<label>Email</label>
+								<input value="{{ user.email }}" name="email" type="text">
+
+								<label>Description</label>
+								<textarea name="description" id="notes" cols="30" rows="10" placeholder="Enter a short bio about yourself..."></textarea>
+
+								<label><i class="fa fa-twitter"></i> Twitter</label>
+								<input name="twitter" placeholder="https://www.twitter.com/" type="text">
+
+								<label><i class="fa fa-facebook-square"></i> Facebook</label>
+								<input name="facebook" placeholder="https://www.facebook.com/" type="text">
+
+							</div>
+		
+							<button class="button margin-top-15">Save Changes</button>
+						</form>
+
+					</div>
+				</div>
+			</div>
+
+			<!-- Change Password -->
+			<div class="col-lg-6 col-md-12">
+				<div class="dashboard-list-box margin-top-0">
+					<h4 class="gray">Change Password</h4>
+					<div class="dashboard-list-box-static">
+
+						<!-- Change Password -->
+						<form method="post" action="/auth/update">
+							<div class="my-profile">
+								<label class="margin-top-0">New Password</label>
+								<input type="password" name="password">
+
+								<button class="button margin-top-15">Change Password</button>
+							</div>
+						</form>
+
+					</div>
+				</div>
+			</div>
+
+
+			<!-- Copyrights -->
+			<div class="col-md-12">
+				<div class="copyrights">© 2017 Listeo. All Rights Reserved.</div>
+			</div>
+
+		</div>
+
+	</div>
+	<!-- Content / End -->
+
+
+</div>
+<!-- Dashboard / End -->
+
+
+</div>
+<!-- Wrapper / End -->
+
+
+<!-- Scripts
+================================================== -->
+<script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
+<script type="text/javascript" src="js/mmenu.min.js"></script>
+<script type="text/javascript" src="js/chosen.min.js"></script>
+<script type="text/javascript" src="js/slick.min.js"></script>
+<script type="text/javascript" src="js/rangeslider.min.js"></script>
+<script type="text/javascript" src="js/magnific-popup.min.js"></script>
+<script type="text/javascript" src="js/waypoints.min.js"></script>
+<script type="text/javascript" src="js/counterup.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/tooltips.min.js"></script>
+<script type="text/javascript" src="js/dropzone.js"></script> 
+<!-- Turbo CDN. Better to use CDN than to store locally. -->
+<script type="text/javascript" src="https://cdn.turbo360-dev.com/dist/turbo.min.js"></script>
+<script type="text/javascript" src="js/custom.js"></script>
+<script type="text/javascript">
+	$(function(){
+		var turbo = Turbo({site_id: '5a3a9e6f474aba0014925c08'})
+
+		$('#btn-file-select').click(function(event){
+			event.preventDefault()
+
+			turbo.uploadFile(function(err, data){
+				if (err){
+					alert('File Upload Error: ' + err.message)
+					return
+				}
+
+				if (data.confirmation != 'success'){
+					alert('Error: ' + data.message)
+					return
+				}
+
+				var file = data.result
+				$.post("/auth/update",
+						{ image: file.url },
+						function(data) {}
+				);
+
+				$('#user-image').attr('src', file.url)
+			})
+		})
+	})
+</script>
+
 </body>
 </html>

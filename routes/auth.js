@@ -44,12 +44,7 @@ router.post('/update', (req, res) => {
 		return
 	}
 
-	if (req.body.id != req.vertexSession.user.id){ // user ID's don't match, unauthorized
-		res.redirect('/error?message=Not%20Authorized')
-		return
-	}
-
-	turbo.updateEntity('user', req.body.id, req.body)
+	turbo.updateEntity('user', req.vertexSession.user.id, req.body)
 	.then(data => {
 		res.redirect('/dashboard')
 	})
@@ -92,7 +87,7 @@ router.get('/currentuser', (req, res) => {
 
 router.get('/logout', (req, res) => {
 	req.vertexSession.reset()
-	res.redirect('/landing')
+	res.redirect('/')
 })
 
 module.exports = router

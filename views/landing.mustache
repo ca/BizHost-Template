@@ -1,73 +1,276 @@
 <!DOCTYPE html>
-<html dir="ltr" lang="en-US">
 <head>
 	{{>head}}
 </head>
 
 <body>
-	{{>nav}}
 
+<!-- Wrapper -->
+<div id="wrapper">
+
+{{>nav}}
+
+<!-- Banner
+================================================== -->
+<div class="main-search-container dark-overlay">
+	<div class="main-search-inner">
+
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<h2>Find Nearby Businesses</h2>
+					<h4>Expolore top-rated local businesses</h4>
+
+					<div class="main-search-input">
+
+						<div class="main-search-input-item">
+							<input type="text" placeholder="What are you looking for?" value=""/>
+						</div>
+
+						<div class="main-search-input-item location">
+							<input type="text" placeholder="Location" value=""/>
+							<a href="#"><i class="fa fa-dot-circle-o"></i></a>
+						</div>
+
+						<div class="main-search-input-item">
+							<select data-placeholder="All Categories" class="chosen-select" >
+								<option>All Categories</option>	
+								<option>Shops</option>
+								<option>Hotels</option>
+								<option>Restaurants</option>
+								<option>Fitness</option>
+								<option>Events</option>
+							</select>
+						</div>
+
+						<button class="button" onclick="window.location.href='listings-half-screen-map-list.html'">Search</button>
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	
+	<!-- Video -->
+	<div class="video-container">
+		<video poster="images/main-search-video-poster.jpg" loop autoplay muted>
+			<source src="images/main-search-video.mp4" type="video/mp4">
+		</video>
+	</div>
+
+</div>
+
+
+
+<!-- Content
+================================================== -->
+<div class="container">
 	<div class="row">
 
-		<div class="col-md-6 col-md-offset-3" style="text-align:center;margin-bottom:48px">
-			<h1>Landing Page</h1>
-			<hr />
-			<div class="grey-box">
-				<h3>Purpose</h3>
-				<hr />
-				<p>
-					This is the primary promotional page that visitors should see who are not registered users. The content should consist of feature descriptions and a prominent call-to-action for user registration.
-				</p>
+		<div class="col-md-12">
+			<h3 class="headline centered margin-top-75">
+				Browse Categories
+			</h3>
+		</div>
+
+	</div>
+</div>
+
+
+<!-- Category Boxes -->
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="categories-boxes-container margin-top-5 margin-bottom-30">
+				
+				<!-- Box -->
+				<a href="listings-list-with-sidebar.html" class="category-small-box">
+					<i class="im im-icon-Hamburger"></i>
+					<h4>Eat &amp; Drink</h4>
+				</a>
+
+				<!-- Box -->
+				<a href="listings-list-with-sidebar.html" class="category-small-box">
+					<i class="im  im-icon-Sleeping"></i>
+					<h4>Hotels</h4>
+				</a>
+
+				<!-- Box -->
+				<a href="listings-list-with-sidebar.html" class="category-small-box">
+					<i class="im im-icon-Shopping-Bag"></i>
+					<h4>Shops</h4>
+				</a>
+
+				<!-- Box -->
+				<a href="listings-list-with-sidebar.html" class="category-small-box">
+					<i class="im im-icon-Cocktail"></i>
+					<h4>Nightlife</h4>
+				</a>
+
+				<!-- Box -->
+				<a href="listings-list-with-sidebar.html" class="category-small-box">
+					<i class="im im-icon-Electric-Guitar"></i>
+					<h4>Events</h4>
+				</a>
+
+				<!-- Box -->
+				<a href="listings-list-with-sidebar.html" class="category-small-box">
+					<i class="im im-icon-Dumbbell"></i>
+					<h4>Fitness</h4>
+				</a>
+
 			</div>
+		</div>
+	</div>
+</div>
+<!-- Category Boxes / End -->
 
-			<div class="grey-box">
-				<h3>User Registration</h3>
-				<hr />
-				<p>
-					The following user registration form sends a POST request the the 'register' hander in the auth.js route found in the /routes directory. Upon successful registration, the site redirects to the 'dashboard.mustache' page.
-				</p>
 
-				<br />
+<!-- Fullwidth Section -->
+<section class="fullwidth margin-top-65 padding-top-75 padding-bottom-70" data-background-color="#f8f8f8">
 
-				<form action="/auth/register" method="POST">
-					<input class="form-control" type="text" name="email" placeholder="Email" /><br />
-					<input class="form-control" type="text" name="username" placeholder="Username" /><br />
-					<input class="form-control" type="password" name="password" placeholder="Password" /><br />
-					<button type="submit" class="btn btn-info">Sign Up</button>
-				</form>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<h3 class="headline centered margin-bottom-45">
+					Most Visited Businesses
+					<span>Discover top-rated local businesses</span>
+				</h3>
 			</div>
-
-			<div class="grey-box">
-				<h3>User Login</h3>
-				<hr />
-				<p>
-					The following user login form sends a POST request the the 'login' hander in the auth.js route found in the /routes directory. Upon successful login, the site redirects to the 'dashboard.mustache' page.
-				</p>
-
-				<br />
-
-				<form action="/auth/login" method="POST">
-					<input class="form-control" type="text" name="email" placeholder="Email" /><br />
-					<input class="form-control" type="password" name="password" placeholder="Password" /><br />
-					<button type="submit" class="btn btn-info">Log In</button>
-				</form>
-			</div>			
-
 		</div>
 	</div>
 
+	<!-- Carousel / Start -->
+	<div class="simple-fw-slick-carousel dots-nav">
 
-  <!-- Turbo library imports: jQuery, Turbo CDN, sample app.js.
-  NOTE: These should be minified in a build script -->
-  <script type="text/javascript" src="/js/jquery.js"></script>
+		<!-- Listing Item -->
+		{{#listings}}
+		<div class="fw-carousel-item">
+			<a href="/listing/{{slug}}" class="listing-item-container compact">
+				<div class="listing-item">
+					<img src="images/listing-item-01.jpg" alt="">
 
-  <!-- For file uploading. Remove if file upload not necessry -->
-  <script type="text/javascript" src="/js/dropzone.js"></script> 
+					<div class="listing-badge now-open">Now Open</div>
 
-  <!-- Turbo CDN. Better to use CDN than to store locally. -->
-  <script type="text/javascript" src="https://cdn.turbo360-dev.com/dist/turbo.min.js"></script>
+					<div class="listing-item-content">
+						<div class="numerical-rating" data-rating="3.5"></div>
+						<h3>{{name}}</h3>
+						<span>964 School Street, New York</span>
+					</div>
+					<span class="like-icon"></span>
+				</div>
+			</a>
+		</div>
+		{{/listings}}
+		<!-- Listing Item / End -->
 
-  <!-- Your app specific code -->
-  <script type="text/javascript" src="/js/app.js"></script>
+	</div>
+	<!-- Carousel / End -->
+
+
+</section>
+<!-- Fullwidth Section / End -->
+
+
+<!-- Container -->
+<div class="container">
+	<div class="row">
+
+		<div class="col-md-12">
+			<h3 class="headline centered margin-bottom-35 margin-top-70">Popular Cities <span>Browse listings in popular places</span></h3>
+		</div>
+		
+		<div class="col-md-4">
+
+			<!-- Image Box -->
+			<a href="listings-list-with-sidebar.html" class="img-box" data-background-image="images/popular-location-01.jpg">
+				<div class="img-box-content visible">
+					<h4>New York </h4>
+					<span>14 Listings</span>
+				</div>
+			</a>
+
+		</div>	
+			
+		<div class="col-md-8">
+
+			<!-- Image Box -->
+			<a href="listings-list-with-sidebar.html" class="img-box" data-background-image="images/popular-location-02.jpg">
+				<div class="img-box-content visible">
+					<h4>Los Angeles</h4>
+					<span>24 Listings</span>
+				</div>
+			</a>
+
+		</div>	
+
+		<div class="col-md-8">
+
+			<!-- Image Box -->
+			<a href="listings-list-with-sidebar.html" class="img-box" data-background-image="images/popular-location-03.jpg">
+				<div class="img-box-content visible">
+					<h4>San Francisco </h4>
+					<span>12 Listings</span>
+				</div>
+			</a>
+
+		</div>	
+			
+		<div class="col-md-4">
+
+			<!-- Image Box -->
+			<a href="listings-list-with-sidebar.html" class="img-box" data-background-image="images/popular-location-04.jpg">
+				<div class="img-box-content visible">
+					<h4>Miami</h4>
+					<span>9 Listings</span>
+				</div>
+			</a>
+
+		</div>
+
+	</div>
+</div>
+<!-- Container / End -->
+
+
+<!-- Flip banner -->
+<a href="listings-half-screen-map-list.html" class="flip-banner parallax margin-top-65" data-background="images/slider-bg-02.jpg" data-color="#f91942" data-color-opacity="0.85" data-img-width="2500" data-img-height="1666">
+	<div class="flip-banner-content">
+		<h2 class="flip-visible">Expolore top-rated attractions nearby</h2>
+		<h2 class="flip-hidden">Browse Listings <i class="sl sl-icon-arrow-right"></i></h2>
+	</div>
+</a>
+<!-- Flip banner / End -->
+
+
+{{>footer}}
+
+
+<!-- Back To Top Button -->
+<div id="backtotop"><a href="#"></a></div>
+
+
+</div>
+<!-- Wrapper / End -->
+
+
+
+<!-- Scripts
+================================================== -->
+<script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
+<script type="text/javascript" src="js/mmenu.min.js"></script>
+<script type="text/javascript" src="js/chosen.min.js"></script>
+<script type="text/javascript" src="js/slick.min.js"></script>
+<script type="text/javascript" src="js/rangeslider.min.js"></script>
+<script type="text/javascript" src="js/magnific-popup.min.js"></script>
+<script type="text/javascript" src="js/waypoints.min.js"></script>
+<script type="text/javascript" src="js/counterup.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/tooltips.min.js"></script>
+<!-- Turbo CDN. Better to use CDN than to store locally. -->
+<script type="text/javascript" src="https://cdn.turbo360-dev.com/dist/turbo.min.js"></script>
+<script type="text/javascript" src="js/custom.js"></script>
+
 </body>
 </html>

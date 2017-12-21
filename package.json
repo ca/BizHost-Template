@@ -17,7 +17,7 @@
     "express": "latest",
     "rimraf": "latest"
   },
-  "app": "5a34ada31268d60014e7c922",
+  "app": "5a3a9e6f474aba0014925c08",
   "deploy": [
     "."
   ],

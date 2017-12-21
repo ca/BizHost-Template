@@ -22,7 +22,30 @@ const staticPages = {
 // the key value proposition as well as guide the visitor to
 // a prominent call-to-action registration form:
 router.get('/', (req, res) => {
-	res.render('landing', null)
+	if (!req.vertexSession || !req.vertexSession.user){ // user not logged in, redirect to error page:
+		controllers.listing.get(req.query)
+		.then(data => {
+			res.render('landing', {listings: data, user: null})
+		})
+		.catch(err => {
+			res.redirect('/error?message=' + err.message)
+		})
+		return
+	}
+
+	controllers.user.getById(req.vertexSession.user.id)
+	.then(user => {
+		controllers.listing.get(req.query)
+		.then(data => {
+			res.render('landing', {listings: data, user: user})
+		})
+		.catch(err => {
+			res.redirect('/error?message=' + err.message)
+		})
+	})
+	.catch(err => {
+		res.redirect('/error?message=' + err.message)
+	})
 })
 
 // this template does not load unless the user is logged in.
