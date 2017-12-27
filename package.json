@@ -10,7 +10,7 @@
   "dependencies": {
     "bluebird": "^3.5.1",
     "nodemon": "latest",
-    "turbo360": "^1.5.12",
+    "turbo360": "^1.5.16",
     "vertex360": "latest"
   },
   "devDependencies": {

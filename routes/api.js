@@ -77,6 +77,10 @@ router.post('/:resource', (req, res) => {
 		return
 	}
 
+	// PASSING USER ID THROUGH
+	// ---- doing this so that I can sign a listing with an owner id
+	if (resource === "listing") req.body.owner = req.vertexSession.user.id;
+
 	controller.post(req.body)
 	.then(data => {
 		res.json({

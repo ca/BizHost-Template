@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<head>
+	{{>head}}
+</head>
+
+<body>
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+{{>admin_nav}}
+
+<!-- Dashboard -->
+<div id="dashboard">
+
+	{{>admin_sidebar}}
+
+	<!-- Content
+	================================================== -->
+	<div class="dashboard-content">
+
+		<!-- Titlebar -->
+		<div id="titlebar">
+			<div class="row">
+				<div class="col-md-12">
+					<h2>My Listings</h2>
+					<!-- Breadcrumbs -->
+					<nav id="breadcrumbs">
+						<ul>
+							<li><a href="#">Home</a></li>
+							<li><a href="#">Dashboard</a></li>
+							<li>My Listings</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			
+			<!-- Listings -->
+			<div class="col-lg-6 col-md-6">
+				<div class="dashboard-list-box margin-top-0">
+					<h4>Active Listings</h4>
+					<ul>
+						<!-- Needs to get user's individual listings -->
+						{{#listings}}
+						<li>
+							<div class="list-box-listing">
+								<div class="list-box-listing-img"><a href="#"><img src="{{cdn}}/images/listing-item-01.jpg" alt=""></a></div>
+								<div class="list-box-listing-content">
+									<div class="inner">
+										<h3><a href="/listing/{{slug}}">{{name}}</a></h3>
+										<span>964 School Street, New York</span>
+										<div class="star-rating" data-rating="3.5">
+											<div class="rating-counter">(12 reviews)</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="buttons-to-right">
+								<a href="#" class="button gray"><i class="sl sl-icon-note"></i> Edit</a>
+								<a href="#" class="button gray"><i class="sl sl-icon-close"></i> Delete</a>
+							</div>
+						</li>
+						{{/listings}}
+					</ul>
+				</div>
+			</div>
+
+			<!-- Add Listing -->
+			<div class="col-lg-6">
+
+				<div id="add-listing">
+
+					<form method="post" action="/api/listing" id="add-listing-form">
+
+					<!-- Section -->
+					<div class="add-listing-section">
+
+						<!-- Headline -->
+						<div class="add-listing-headline">
+							<h3><i class="sl sl-icon-doc"></i> Basic Informations</h3>
+						</div>
+
+						<!-- Title -->
+						<div class="row with-forms">
+							<div class="col-md-12">
+								<h5>Listing Title <i class="tip" data-tip-content="Name of your business"></i></h5>
+								<input class="search-field" type="text" name="name" value=""/>
+							</div>
+						</div>
+
+						<!-- Row -->
+						<div class="row with-forms">
+
+							<!-- Status -->
+							<div class="col-md-6">
+								<h5>Category</h5>
+								<select class="chosen-select-no-single" name="category">
+									<option label="blank">Select Category</option>	
+									<option>Eat &amp; Drink</option>
+									<option>Shops</option>
+									<option>Hotels</option>
+									<option>Restaurants</option>
+									<option>Fitness</option>
+									<option>Events</option>
+								</select>
+							</div>
+
+							<!-- Type -->
+							<div class="col-md-6">
+								<h5>Keywords <i class="tip" data-tip-content="Maximum of 15 keywords related with your business"></i></h5>
+								<input type="text" placeholder="Keywords should be separated by commas" name="keywords">
+							</div>
+
+						</div>
+						<!-- Row / End -->
+
+					</div>
+					<!-- Section / End -->
+
+					<!-- Section -->
+					<div class="add-listing-section margin-top-45">
+
+						<!-- Headline -->
+						<div class="add-listing-headline">
+							<h3><i class="sl sl-icon-location"></i> Location</h3>
+						</div>
+
+						<div class="submit-section">
+
+							<!-- Row -->
+							<div class="row with-forms">
+
+								<!-- City -->
+								<div class="col-md-6">
+									<h5>City</h5>
+									<select class="chosen-select-no-single" name="city">
+										<option label="blank">Select City</option>	
+										<option>New York</option>
+										<option>Los Angeles</option>
+										<option>Chicago</option>
+										<option>Houston</option>
+										<option>Phoenix</option>
+										<option>San Diego</option>
+										<option>Austin</option>
+									</select>
+								</div>
+
+								<!-- Address -->
+								<div class="col-md-6">
+									<h5>Address</h5>
+									<input type="text" placeholder="e.g. 964 School Street" name="address">
+								</div>
+
+								<!-- State -->
+								<div class="col-md-6">
+									<h5>State</h5>
+									<input type="text" name="state">
+								</div>
+
+								<!-- Zip-Code -->
+								<div class="col-md-6">
+									<h5>Zip-Code</h5>
+									<input type="text" name="zip">
+								</div>
+
+							</div>
+							<!-- Row / End -->
+
+						</div>
+					</div>
+					<!-- Section / End -->
+
+
+					<!-- Section -->
+					<!-- <div class="add-listing-section margin-top-45">
+
+						
+						<div class="add-listing-headline">
+							<h3><i class="sl sl-icon-picture"></i> Gallery</h3>
+						</div>
+
+						
+						<div class="submit-section">
+							<form action="/file-upload" class="dropzone" ></form>
+						</div>
+
+					</div> -->
+					<!-- Section / End -->
+
+
+					<!-- Section -->
+					<div class="add-listing-section margin-top-45">
+
+						<!-- Headline -->
+						<div class="add-listing-headline">
+							<h3><i class="sl sl-icon-docs"></i> Details</h3>
+						</div>
+
+						<!-- Description -->
+						<div class="form">
+							<h5>Description</h5>
+							<textarea class="WYSIWYG" name="summary" cols="40" rows="3" id="summary" spellcheck="true"></textarea>
+						</div>
+
+						<!-- Row -->
+						<!-- <div class="row with-forms">
+
+							<div class="col-md-4">
+								<h5>Phone <span>(optional)</span></h5>
+								<input type="text" name="phone">
+							</div>
+
+							<div class="col-md-4">
+								<h5>Website <span>(optional)</span></h5>
+								<input type="text" name="website">
+							</div>
+
+							<div class="col-md-4">
+								<h5>E-mail <span>(optional)</span></h5>
+								<input type="email" name="email">
+							</div>
+
+						</div> -->
+						<!-- Row / End -->
+
+
+						<!-- Row -->
+						<!-- <div class="row with-forms">
+
+							<div class="col-md-4">
+								<h5 class="fb-input"><i class="fa fa-facebook-square"></i> Facebook <span>(optional)</span></h5>
+								<input type="text" placeholder="https://www.facebook.com/" name="facebook">
+							</div>
+
+							<div class="col-md-4">
+								<h5 class="twitter-input"><i class="fa fa-twitter"></i> Twitter <span>(optional)</span></h5>
+								<input type="text" placeholder="https://www.twitter.com/" name="twitter">
+							</div>
+
+							<div class="col-md-4">
+								<h5 class="gplus-input"><i class="fa fa-google-plus"></i> Google Plus <span>(optional)</span></h5>
+								<input type="text" placeholder="https://plus.google.com" name="google">
+							</div>
+
+						</div> -->
+						<!-- Row / End -->
+
+					</div>
+					<!-- Section / End -->
+
+
+					<a class="button preview" onclick="event.preventDefault();document.getElementById('add-listing-form').submit();">Add Listing <i class="fa fa-arrow-circle-right"></i></a>
+
+					</form>
+				</div>
+			</div>
+
+			<!-- Copyrights -->
+			<div class="col-md-12">
+				<div class="copyrights">© 2017 Listeo. All Rights Reserved.</div>
+			</div>
+		</div>
+
+	</div>
+	<!-- Content / End -->
+
+
+</div>
+<!-- Dashboard / End -->
+
+
+</div>
+<!-- Wrapper / End -->
+
+{{>scripts}}
+
+</body>
+</html>

@@ -46,7 +46,10 @@ router.post('/update', (req, res) => {
 
 	turbo.updateEntity('user', req.vertexSession.user.id, req.body)
 	.then(data => {
-		res.redirect('/dashboard')
+		res.send({
+			message: 'success',
+			user: data
+		})
 	})
 	.catch(err => {
 		res.redirect('/error?message=' + err.message)

@@ -1195,6 +1195,20 @@ $.scrollTo = $.fn.scrollTo = function(x, y, options){
     });
 };
 
+// Sets Active Tab
+let slug = window.location.href.split('/');
+$.each($('#responsive').children(), function (i, val) {
+	let tab = $($('#responsive').children()[i]).children();
+	if (slug[3] === tab.html().toLowerCase()) {
+		tab.addClass('current');
+	}
+})
+
+if (slug[4] === 'listings') {
+	$($($('#admin_sidenav').children()[0]).children()[1]).addClass('active')//
+} else {
+	$($($('#admin_sidenav').children()[0]).children()[0]).addClass('active')
+}
 
 /*----------------------------------------------------*/
 /*  Ratings Script

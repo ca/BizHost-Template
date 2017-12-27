@@ -13,42 +13,7 @@
 <!-- Dashboard -->
 <div id="dashboard">
 
-	<!-- Navigation
-	================================================== -->
-
-	<!-- Responsive Navigation Trigger -->
-	<a href="#" class="dashboard-responsive-nav-trigger"><i class="fa fa-reorder"></i> Dashboard Navigation</a>
-	
-	<div class="dashboard-nav">
-		<div class="dashboard-nav-inner">
-
-			<ul data-submenu-title="Main">
-				<li><a href="/dashboard"><i class="sl sl-icon-settings"></i> Dashboard</a></li>
-				<li><a href="dashboard-messages.html"><i class="sl sl-icon-envelope-open"></i> Messages <span class="nav-tag messages">2</span></a></li>
-			</ul>
-			
-			<ul data-submenu-title="Listings">
-				<li><a><i class="sl sl-icon-layers"></i> My Listings</a>
-					<ul>
-						<li><a href="dashboard-my-listings.html">Active <span class="nav-tag green">6</span></a></li>
-						<li><a href="dashboard-my-listings.html">Pending <span class="nav-tag yellow">1</span></a></li>
-						<li><a href="dashboard-my-listings.html">Expired <span class="nav-tag red">2</span></a></li>
-					</ul>	
-				</li>
-				<li><a href="dashboard-reviews.html"><i class="sl sl-icon-star"></i> Reviews</a></li>
-				<li><a href="dashboard-bookmarks.html"><i class="sl sl-icon-heart"></i> Favorites</a></li>
-				<li><a href="/listings"><i class="sl sl-icon-plus"></i> Add Listing</a></li>
-			</ul>	
-
-			<ul data-submenu-title="Account">
-				<li class="active"><a href="dashboard-my-profile.html"><i class="sl sl-icon-user"></i> My Profile</a></li>
-				<li><a href="/auth/logout"><i class="sl sl-icon-power"></i> Logout</a></li>
-			</ul>
-
-		</div>
-	</div>
-	<!-- Navigation / End -->
-
+	{{>admin_sidebar}}
 
 	<!-- Content
 	================================================== -->
@@ -96,7 +61,7 @@
 						</div>
 	
 						<!-- Details -->
-						<form method="post" action="/auth/update">
+						<form onsubmit="_updateUser(event)" id="profile-data">
 							<div class="my-profile">
 
 								<label>Your Name</label>
@@ -106,13 +71,13 @@
 								<input value="{{ user.email }}" name="email" type="text">
 
 								<label>Description</label>
-								<textarea name="description" id="notes" cols="30" rows="10" placeholder="Enter a short bio about yourself..."></textarea>
+								<textarea name="description" id="notes" cols="30" rows="10" placeholder="Enter a short bio about yourself...">{{user.description}}</textarea>
 
 								<label><i class="fa fa-twitter"></i> Twitter</label>
-								<input name="twitter" placeholder="https://www.twitter.com/" type="text">
+								<input value="{{user.twitter}}" name="twitter" placeholder="https://www.twitter.com/" type="text">
 
 								<label><i class="fa fa-facebook-square"></i> Facebook</label>
-								<input name="facebook" placeholder="https://www.facebook.com/" type="text">
+								<input value="{{user.facebook}}" name="facebook" placeholder="https://www.facebook.com/" type="text">
 
 							</div>
 		
@@ -132,8 +97,14 @@
 						<!-- Change Password -->
 						<form method="post" action="/auth/update">
 							<div class="my-profile">
+								<label class="margin-top-0">Old Password</label>
+								<input type="password" name="old-password">
+
 								<label class="margin-top-0">New Password</label>
 								<input type="password" name="password">
+
+								<label class="margin-top-0">Confirm Password</label>
+								<input type="password" name="password2">
 
 								<button class="button margin-top-15">Change Password</button>
 							</div>
@@ -162,25 +133,10 @@
 </div>
 <!-- Wrapper / End -->
 
-
-<!-- Scripts
-================================================== -->
-<script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
-<script type="text/javascript" src="js/mmenu.min.js"></script>
-<script type="text/javascript" src="js/chosen.min.js"></script>
-<script type="text/javascript" src="js/slick.min.js"></script>
-<script type="text/javascript" src="js/rangeslider.min.js"></script>
-<script type="text/javascript" src="js/magnific-popup.min.js"></script>
-<script type="text/javascript" src="js/waypoints.min.js"></script>
-<script type="text/javascript" src="js/counterup.min.js"></script>
-<script type="text/javascript" src="js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="js/tooltips.min.js"></script>
-<script type="text/javascript" src="js/dropzone.js"></script> 
-<!-- Turbo CDN. Better to use CDN than to store locally. -->
-<script type="text/javascript" src="https://cdn.turbo360-dev.com/dist/turbo.min.js"></script>
-<script type="text/javascript" src="js/custom.js"></script>
+{{>scripts}}
 <script type="text/javascript">
 	$(function(){
+		// This should be changed to your APP ID
 		var turbo = Turbo({site_id: '5a3a9e6f474aba0014925c08'})
 
 		$('#btn-file-select').click(function(event){
@@ -207,6 +163,17 @@
 			})
 		})
 	})
+
+	function _updateUser (e) {
+		// console.log($('#profile-data').serialize())
+		e.preventDefault();
+		$.post(	'/auth/update',
+				$('#profile-data').serialize(),
+				function (response) {
+					console.log(response);
+					alert('Your profile was updated.');
+				})
+	}
 </script>
 
 </body>

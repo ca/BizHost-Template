@@ -18,8 +18,8 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12">
-					<h2>Find Nearby Businesses</h2>
-					<h4>Expolore top-rated local businesses</h4>
+					<h2>{{ static.headline }}</h2>
+					<h4>{{ static.tagline }}</h4>
 
 					<div class="main-search-input">
 
@@ -43,7 +43,7 @@
 							</select>
 						</div>
 
-						<button class="button" onclick="window.location.href='listings-half-screen-map-list.html'">Search</button>
+						<button class="button" onclick="window.location.href='/listings'">Search</button>
 
 					</div>
 				</div>
@@ -54,7 +54,7 @@
 	
 	<!-- Video -->
 	<div class="video-container">
-		<video poster="images/main-search-video-poster.jpg" loop autoplay muted>
+		<video poster="{{ static.header_bg }}" loop autoplay muted>
 			<source src="images/main-search-video.mp4" type="video/mp4">
 		</video>
 	</div>
@@ -85,37 +85,37 @@
 			<div class="categories-boxes-container margin-top-5 margin-bottom-30">
 				
 				<!-- Box -->
-				<a href="listings-list-with-sidebar.html" class="category-small-box">
+				<a href="/listings" class="category-small-box">
 					<i class="im im-icon-Hamburger"></i>
 					<h4>Eat &amp; Drink</h4>
 				</a>
 
 				<!-- Box -->
-				<a href="listings-list-with-sidebar.html" class="category-small-box">
+				<a href="/listings" class="category-small-box">
 					<i class="im  im-icon-Sleeping"></i>
 					<h4>Hotels</h4>
 				</a>
 
 				<!-- Box -->
-				<a href="listings-list-with-sidebar.html" class="category-small-box">
+				<a href="/listings" class="category-small-box">
 					<i class="im im-icon-Shopping-Bag"></i>
 					<h4>Shops</h4>
 				</a>
 
 				<!-- Box -->
-				<a href="listings-list-with-sidebar.html" class="category-small-box">
+				<a href="/listings" class="category-small-box">
 					<i class="im im-icon-Cocktail"></i>
 					<h4>Nightlife</h4>
 				</a>
 
 				<!-- Box -->
-				<a href="listings-list-with-sidebar.html" class="category-small-box">
+				<a href="/listings" class="category-small-box">
 					<i class="im im-icon-Electric-Guitar"></i>
 					<h4>Events</h4>
 				</a>
 
 				<!-- Box -->
-				<a href="listings-list-with-sidebar.html" class="category-small-box">
+				<a href="/listings" class="category-small-box">
 					<i class="im im-icon-Dumbbell"></i>
 					<h4>Fitness</h4>
 				</a>
@@ -178,56 +178,22 @@
 	<div class="row">
 
 		<div class="col-md-12">
-			<h3 class="headline centered margin-bottom-35 margin-top-70">Popular Cities <span>Browse listings in popular places</span></h3>
+			<h3 class="headline centered margin-bottom-35 margin-top-70">Featured Hosts <span>These hosts create the most popular listings.</span></h3>
 		</div>
 		
+		{{#featured_hosts}}
 		<div class="col-md-4">
 
 			<!-- Image Box -->
-			<a href="listings-list-with-sidebar.html" class="img-box" data-background-image="images/popular-location-01.jpg">
+			<a href="/profile/{{username}}" class="img-box" data-background-image="{{image}}">
 				<div class="img-box-content visible">
-					<h4>New York </h4>
+					<h4>{{name}} </h4>
 					<span>14 Listings</span>
 				</div>
 			</a>
 
 		</div>	
-			
-		<div class="col-md-8">
-
-			<!-- Image Box -->
-			<a href="listings-list-with-sidebar.html" class="img-box" data-background-image="images/popular-location-02.jpg">
-				<div class="img-box-content visible">
-					<h4>Los Angeles</h4>
-					<span>24 Listings</span>
-				</div>
-			</a>
-
-		</div>	
-
-		<div class="col-md-8">
-
-			<!-- Image Box -->
-			<a href="listings-list-with-sidebar.html" class="img-box" data-background-image="images/popular-location-03.jpg">
-				<div class="img-box-content visible">
-					<h4>San Francisco </h4>
-					<span>12 Listings</span>
-				</div>
-			</a>
-
-		</div>	
-			
-		<div class="col-md-4">
-
-			<!-- Image Box -->
-			<a href="listings-list-with-sidebar.html" class="img-box" data-background-image="images/popular-location-04.jpg">
-				<div class="img-box-content visible">
-					<h4>Miami</h4>
-					<span>9 Listings</span>
-				</div>
-			</a>
-
-		</div>
+		{{/featured_hosts}}
 
 	</div>
 </div>
@@ -235,9 +201,9 @@
 
 
 <!-- Flip banner -->
-<a href="listings-half-screen-map-list.html" class="flip-banner parallax margin-top-65" data-background="images/slider-bg-02.jpg" data-color="#f91942" data-color-opacity="0.85" data-img-width="2500" data-img-height="1666">
+<a href="/listings" class="flip-banner parallax margin-top-65" data-background="images/slider-bg-02.jpg" data-color="#f91942" data-color-opacity="0.85" data-img-width="2500" data-img-height="1666">
 	<div class="flip-banner-content">
-		<h2 class="flip-visible">Expolore top-rated attractions nearby</h2>
+		<h2 class="flip-visible">{{ static.cta }}</h2>
 		<h2 class="flip-hidden">Browse Listings <i class="sl sl-icon-arrow-right"></i></h2>
 	</div>
 </a>
@@ -247,30 +213,10 @@
 {{>footer}}
 
 
-<!-- Back To Top Button -->
-<div id="backtotop"><a href="#"></a></div>
-
-
 </div>
 <!-- Wrapper / End -->
 
-
-
-<!-- Scripts
-================================================== -->
-<script type="text/javascript" src="js/jquery-2.2.0.min.js"></script>
-<script type="text/javascript" src="js/mmenu.min.js"></script>
-<script type="text/javascript" src="js/chosen.min.js"></script>
-<script type="text/javascript" src="js/slick.min.js"></script>
-<script type="text/javascript" src="js/rangeslider.min.js"></script>
-<script type="text/javascript" src="js/magnific-popup.min.js"></script>
-<script type="text/javascript" src="js/waypoints.min.js"></script>
-<script type="text/javascript" src="js/counterup.min.js"></script>
-<script type="text/javascript" src="js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="js/tooltips.min.js"></script>
-<!-- Turbo CDN. Better to use CDN than to store locally. -->
-<script type="text/javascript" src="https://cdn.turbo360-dev.com/dist/turbo.min.js"></script>
-<script type="text/javascript" src="js/custom.js"></script>
+{{>scripts}}
 
 </body>
 </html>
