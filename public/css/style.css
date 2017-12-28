@@ -827,9 +827,9 @@ body #navigation ul ul {
 }
 
 .user-menu.active ul {
-	visibility: visible;
-	opacity: 1;
-	transform: translate3d(0,0,0);
+	visibility: visible!important;
+	opacity: 1!important;
+	transform: translate3d(0,0,0)!important;
 }
 
 
@@ -4678,14 +4678,14 @@ body .comment-content p { padding: 5px 0; font-size: 15px; }
 	float: right;
 	top: -25px;
 }
-
+#photoUpload,
 .photoUpload {
     position: relative;
     overflow: hidden;
     padding: 3px 12px;
 	cursor: pointer;
 }
-
+#photoUpload input.upload,
 .photoUpload input.upload {
     position: absolute;
     top: 0;
@@ -9717,14 +9717,14 @@ a.close-list-item {
 	left: 15px;
 	width: auto;
 }
-
+#photoUpload,
 .photoUpload {
     position: relative;
     overflow: hidden;
     padding: 3px 12px;
 	cursor: pointer;
 }
-
+#photoUpload input.upload,
 .photoUpload input.upload {
     position: absolute;
     top: 0;

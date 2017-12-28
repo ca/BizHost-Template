@@ -135,6 +135,29 @@ router.get('/profiles', (req, res) => {
 })
 
 router.get('/profile/:username', (req, res) => {
+	if (req.vertexSession == null || req.vertexSession.user == null){ // user not logged in, redirect to error page:
+		controllers.user.get({username:req.params.username})
+		.then(data => {
+			if (data.length == 0){ // not found, throw error
+				throw new Error('User not found.')
+				return
+			}
+
+			const profile = data[0]
+			controllers.listing.get({ owner: profile.id })
+			.then(listings => {
+				res.render('profile', {profile: profile, listings: listings})
+			})
+			.catch(err => {
+				res.redirect('/error?message=' + err.message)
+			})
+		})
+		.catch(err => {
+			res.redirect('/error?message=' + err.message)
+		})
+		return
+	}
+
 	controllers.user.getById(req.vertexSession.user.id)
 	.then(user => {
 		controllers.user.get({username:req.params.username})
@@ -160,6 +183,7 @@ router.get('/profile/:username', (req, res) => {
 	.catch(err => {
 		res.redirect('/error?message=' + err.message)
 	})
+
 })
 
 // this page shows all blog posts currently on the app:

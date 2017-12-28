@@ -49,6 +49,11 @@
 				<i class="sl sl-icon-user-following"></i> Verified Account
 			</div>
 
+			<div class="boxed-widget margin-top-30">
+				<h3>Bio</h3>
+				<p>{{profile.description}}</p>
+			</div>
+
 			<!-- Contact -->
 			<div class="boxed-widget margin-top-30 margin-bottom-50">
 				<h3>Contact</h3>
@@ -105,13 +110,14 @@
 							
 							<!-- Image -->
 							<div class="listing-item-image">
-								<img src="{{cdn}}/images/listing-item-01.jpg" alt="">
-								<span class="tag">Eat &amp; Drink</span>
+								<img src="{{#images.length}}{{images.0}}{{/images.length}}{{^images.length}}{{cdn}}/images/listing-item-01.jpg{{/images.length}}" alt="">
+								<span class="tag">{{category}}</span>
 							</div>
 							
 							<!-- Content -->
 							<div class="listing-item-content">
-								<div class="listing-badge now-open">Now Open</div>
+								<!-- You can use this ribbon to display info about the listing -->
+								<!-- <div class="listing-badge now-open">Now Open</div> -->
 
 								<div class="listing-item-inner">
 									<h3 style="text-transform:capitalize">{{name}}</h3>
@@ -156,7 +162,7 @@
 								<p>Morbi velit eros, sagittis in facilisis non, rhoncus et erat. Nam posuere tristique sem, eu ultricies tortor imperdiet vitae. Curabitur lacinia neque non metus</p>
 								
 								<div class="review-images mfp-gallery-container">
-									<a href="images/review-image-01.jpg" class="mfp-gallery"><img src="images/review-image-01.jpg" alt=""></a>
+									<a href="{{cdn}}/images/review-image-01.jpg" class="mfp-gallery"><img src="{{cdn}}/images/review-image-01.jpg" alt=""></a>
 								</div>
 							</div>
 						</li>
@@ -180,8 +186,8 @@
 								<p>Morbi velit eros, sagittis in facilisis non, rhoncus et erat. Nam posuere tristique sem, eu ultricies tortor imperdiet vitae. Curabitur lacinia neque non metus</p>
 								
 								<div class="review-images mfp-gallery-container">
-									<a href="images/review-image-02.jpg" class="mfp-gallery"><img src="images/review-image-02.jpg" alt=""></a>
-									<a href="images/review-image-03.jpg" class="mfp-gallery"><img src="images/review-image-03.jpg" alt=""></a>
+									<a href="{{cdn}}/images/review-image-02.jpg" class="mfp-gallery"><img src="{{cdn}}/images/review-image-02.jpg" alt=""></a>
+									<a href="{{cdn}}/images/review-image-03.jpg" class="mfp-gallery"><img src="{{cdn}}/images/review-image-03.jpg" alt=""></a>
 								</div>
 							</div>
 						</li>

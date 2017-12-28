@@ -9,13 +9,13 @@
 
 <!-- Slider
 ================================================== -->
+{{#listing.images.length}}
 <div class="listing-slider mfp-gallery-container margin-bottom-0">
-	<a href="{{cdn}}/images/single-listing-01.jpg" data-background-image="{{cdn}}/images/single-listing-01.jpg" class="item mfp-gallery" title="Title 1"></a>
-	<a href="{{cdn}}/images/single-listing-02.jpg" data-background-image="{{cdn}}/images/single-listing-02.jpg" class="item mfp-gallery" title="Title 3"></a>
-	<a href="{{cdn}}/images/single-listing-03.jpg" data-background-image="{{cdn}}/images/single-listing-03.jpg" class="item mfp-gallery" title="Title 2"></a>
-	<a href="{{cdn}}/images/single-listing-04.jpg" data-background-image="{{cdn}}/images/single-listing-04.jpg" class="item mfp-gallery" title="Title 4"></a>
+	{{#listing.images}}
+	<a href="{{.}}" data-background-image="{{.}}" class="item mfp-gallery" title="{{listing.name}}"></a>
+	{{/listing.images}}
 </div>
-
+{{/listing.images.length}}
 
 <!-- Content
 ================================================== -->
@@ -26,7 +26,7 @@
 			<!-- Titlebar -->
 			<div id="titlebar" class="listing-titlebar">
 				<div class="listing-titlebar-title">
-					<h2>{{listing.name}}<span class="listing-tag">Eat &amp; Drink</span></h2>
+					<h2>{{listing.name}}<span class="listing-tag">{{listing.category}}</span></h2>
 					<span>
 						<a href="#listing-location" class="listing-address">
 							<i class="fa fa-map-marker"></i>
@@ -63,7 +63,7 @@
 				<h3 class="listing-desc-headline margin-top-60 margin-bottom-30">Location</h3>
 
 				<div id="singleListingMap-container">
-					<div id="singleListingMap" data-latitude="40.70437865245596" data-longitude="-73.98674011230469" data-map-icon="im im-icon-Hamburger"></div>
+					<div id="singleListingMap" data-address="{{listing.address}}" data-city="{{listing.city}}" data-state="{{listing.state}}" data-map-icon="im im-icon-Hamburger"></div>
 					<a href="#" id="streetView">Street View</a>
 				</div>
 			</div>
@@ -307,7 +307,7 @@
 {{>scripts}}
 
 <!-- Maps -->
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&amp;language=en"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyDEunBUzWAXvpcBsbHyN96FW608iUHuV3I&sensor=false&language=en"></script>
 <script type="text/javascript" src="{{cdn}}/js/infobox.min.js"></script>
 <script type="text/javascript" src="{{cdn}}/js/markerclusterer.js"></script>
 <script type="text/javascript" src="{{cdn}}/js/maps.js"></script>	

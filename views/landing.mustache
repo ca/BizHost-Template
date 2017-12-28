@@ -55,7 +55,8 @@
 	<!-- Video -->
 	<div class="video-container">
 		<video poster="{{ static.header_bg }}" loop autoplay muted>
-			<source src="images/main-search-video.mp4" type="video/mp4">
+			<!-- If you want a video banner, you can add the video here -->
+			<!-- <source src="images/main-search-video.mp4" type="video/mp4"> -->
 		</video>
 	</div>
 
@@ -149,14 +150,16 @@
 		<div class="fw-carousel-item">
 			<a href="/listing/{{slug}}" class="listing-item-container compact">
 				<div class="listing-item">
-					<img src="images/listing-item-01.jpg" alt="">
+					
+					<img src="{{#images.length}}{{images.0}}{{/images.length}}{{^images.length}}{{cdn}}/images/listing-item-01.jpg{{/images.length}}" alt="">
 
-					<div class="listing-badge now-open">Now Open</div>
+					<!-- You can use these ribbons to show some information about the listing. -->
+					<!-- <div class="listing-badge now-open">Now Open</div> -->
 
 					<div class="listing-item-content">
 						<div class="numerical-rating" data-rating="3.5"></div>
 						<h3>{{name}}</h3>
-						<span>964 School Street, New York</span>
+						<span>{{ address }}, {{ city }}</span>
 					</div>
 					<span class="like-icon"></span>
 				</div>
@@ -187,7 +190,7 @@
 			<!-- Image Box -->
 			<a href="/profile/{{username}}" class="img-box" data-background-image="{{image}}">
 				<div class="img-box-content visible">
-					<h4>{{name}} </h4>
+					<h4 style="text-transform: capitalize;">{{name}}</h4>
 					<span>14 Listings</span>
 				</div>
 			</a>
