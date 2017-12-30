@@ -298,6 +298,7 @@ router.get('/listing/:slug', (req, res) => {
 router.get('/pricing', (req, res) => {
 	if (!req.vertexSession || !req.vertexSession.user){ // user not logged in, redirect to error page:
 		res.render('pricing', { user: null });
+		return;
 	}
 	controllers.user.getById(req.vertexSession.user.id)
 	.then(user => {
@@ -311,6 +312,7 @@ router.get('/pricing', (req, res) => {
 router.get('/contact', (req, res) => {
 	if (!req.vertexSession || !req.vertexSession.user){ // user not logged in, redirect to error page:
 		res.render('contact', { user: null });
+		return;
 	}
 	controllers.user.getById(req.vertexSession.user.id)
 	.then(user => {
@@ -324,6 +326,7 @@ router.get('/contact', (req, res) => {
 router.get('/about', (req, res) => {
 	if (!req.vertexSession || !req.vertexSession.user){ // user not logged in, redirect to error page:
 		res.render('about', { user: null });
+		return;
 	}
 	controllers.user.getById(req.vertexSession.user.id)
 	.then(user => {
@@ -337,6 +340,7 @@ router.get('/about', (req, res) => {
 router.get('/documentation', (req, res) => {
 	if (!req.vertexSession || !req.vertexSession.user){ // user not logged in, redirect to error page:
 		res.render('docs', { user: null });
+		return;
 	}
 	controllers.user.getById(req.vertexSession.user.id)
 	.then(user => {
