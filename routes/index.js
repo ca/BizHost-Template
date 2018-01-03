@@ -23,47 +23,27 @@ const staticPages = {
 // the key value proposition as well as guide the visitor to
 // a prominent call-to-action registration form:
 router.get('/', (req, res) => {
+	// response "scope" is utilized to keep values returned
+	// from each promise and use them later on in the chain
+	let response = {};
     turbo.pageData('home')
     .then(static => {
-    	if (!req.vertexSession || !req.vertexSession.user){ // user not logged in, redirect to error page:
-			controllers.listing.get(req.query)
-			.then(listings => {
-				controllers.user.get(req.query)
-				.then(featured => {
-					res.render(static.template, {listings: listings, user: null, featured_hosts: featured, static: static})
-				})
-				.catch(err => {
-					res.redirect('/error?message=' + err.message)
-				})
-			})
-			.catch(err => {
-				res.redirect('/error?message=' + err.message)
-			})
-			return
-		}
-
-		controllers.user.getById(req.vertexSession.user.id)
-		.then(user => {
-			controllers.listing.get(req.query)
-			.then(listings => {
-				controllers.user.get(req.query)
-				.then(featured => {
-					console.log(featured)
-					res.render(static.template, {listings: listings, user: user, featured_hosts: featured, static: static})				
-				})
-				.catch(err => {
-					res.redirect('/error?message=' + err.message)
-				})
-			})
-			.catch(err => {
-				res.redirect('/error?message=' + err.message)
-			})
-		})
-		.catch(err => {
-			res.redirect('/error?message=' + err.message)
-		})
-
+    	response.static = static;
+    	if (!req.vertexSession || !req.vertexSession.user){ return null }
+		return controllers.user.getById(req.vertexSession.user.id)
     })
+    .then(user => {
+		response.user = user;
+		return controllers.listing.get(req.query)
+	})
+	.then(listings => {
+		response.listings = listings;
+		return controllers.user.get(req.query)
+	})
+	.then(featured => {
+		response.featured_hosts = featured;
+		res.render(response.static.template, response)
+	})
     .catch(err => {
         res.redirect('/error?message=' + err)
     })
@@ -106,18 +86,15 @@ router.get('/dashboard/listings', (req, res) => {
 		return
 	}
 
+	let response = {};
 	controllers.user.getById(req.vertexSession.user.id)
 	.then(user => {
-
-		controllers.listing.get({ owner: req.vertexSession.user.id })
-		.then(data => {
-			console.log('listings: ', data)
-			res.render('dashboard_listings', {user: user, listings: data}) // user data passed in as "user" key for Mustache rendering
-		})
-		.catch(err => {
-			res.redirect('/error?message=' + err.message)
-		})
-		
+		response.user = user;
+		return controllers.listing.get({ owner: req.vertexSession.user.id })
+	})
+	.then(listings => {
+		response.listings = listings;
+		res.render('dashboard_listings', response) // user data passed in as "user" key for Mustache rendering
 	})
 	.catch(err => {
 		res.redirect('/error?message=' + err.message)
@@ -135,8 +112,9 @@ router.get('/profiles', (req, res) => {
 })
 
 router.get('/profile/:username', (req, res) => {
+	let response = {};
 	if (req.vertexSession == null || req.vertexSession.user == null){ // user not logged in, redirect to error page:
-		controllers.user.get({username:req.params.username})
+		controllers.user.get({ username:req.params.username })
 		.then(data => {
 			if (data.length == 0){ // not found, throw error
 				throw new Error('User not found.')
@@ -144,13 +122,12 @@ router.get('/profile/:username', (req, res) => {
 			}
 
 			const profile = data[0]
-			controllers.listing.get({ owner: profile.id })
-			.then(listings => {
-				res.render('profile', {profile: profile, listings: listings})
-			})
-			.catch(err => {
-				res.redirect('/error?message=' + err.message)
-			})
+			response.profile = profile;
+			return controllers.listing.get({ owner: profile.id })
+		})
+		.then(listings => {
+			response.listings = listings
+			res.render('profile', response)
 		})
 		.catch(err => {
 			res.redirect('/error?message=' + err.message)
@@ -160,30 +137,26 @@ router.get('/profile/:username', (req, res) => {
 
 	controllers.user.getById(req.vertexSession.user.id)
 	.then(user => {
-		controllers.user.get({username:req.params.username})
-		.then(data => {
-			if (data.length == 0){ // not found, throw error
-				throw new Error('User not found.')
-				return
-			}
+		response.user = user;
+		return controllers.user.get({username:req.params.username})
+	})
+	.then(data => {
+		if (data.length == 0){ // not found, throw error
+			throw new Error('User not found.')
+			return
+		}
 
-			const profile = data[0]
-			controllers.listing.get({ owner: profile.id })
-			.then(listings => {
-				res.render('profile', {user: user, profile: profile, listings: listings})
-			})
-			.catch(err => {
-				res.redirect('/error?message=' + err.message)
-			})
-		})
-		.catch(err => {
-			res.redirect('/error?message=' + err.message)
-		})
+		const profile = data[0]
+		response.profile = profile;
+		return controllers.listing.get({ owner: profile.id })
+	})
+	.then(listings => {
+		response.listings = listings;
+		res.render('profile', response)
 	})
 	.catch(err => {
 		res.redirect('/error?message=' + err.message)
 	})
-
 })
 
 // this page shows all blog posts currently on the app:
@@ -196,7 +169,6 @@ router.get('/blog', (req, res) => {
 		res.redirect('/error?message=' + err.message)
 	})
 })
-
 
 // this page shows and individual blog post specified by slug:
 router.get('/post/:slug', (req, res) => {
@@ -216,6 +188,7 @@ router.get('/post/:slug', (req, res) => {
 })
 
 router.get('/listings', (req, res) => {
+	let response = {};
 	if (!req.vertexSession || !req.vertexSession.user){ // user not logged in, redirect to error page:
 		controllers.listing.get(req.query)
 		.then(data => {
@@ -229,13 +202,13 @@ router.get('/listings', (req, res) => {
 
 	controllers.user.getById(req.vertexSession.user.id)
 	.then(user => {
-		controllers.listing.get(req.query)
-		.then(data => {
-			res.render('listings', {listings: data, user: user})
-		})
-		.catch(err => {
-			res.redirect('/error?message=' + err.message)
-		})
+		response.user = user;
+		return controllers.listing.get(req.query)
+	})
+	.then(listings => {
+		response.listings = listings;
+		response.results = listings.length;
+		res.render('listings', response)
 	})
 	.catch(err => {
 		res.redirect('/error?message=' + err.message)
@@ -243,7 +216,7 @@ router.get('/listings', (req, res) => {
 })
 
 router.get('/listing/:slug', (req, res) => {
-
+	let response = {};
 	if (!req.vertexSession || !req.vertexSession.user){ // user not logged in, redirect to error page:
 		controllers.listing.get({slug:req.params.slug})
 		.then(data => {
@@ -253,13 +226,12 @@ router.get('/listing/:slug', (req, res) => {
 			}
 
 			const listing = data[0];
-			controllers.user.getById(listing.owner)
-			.then(user => {
-				res.render('listing', {listing: listing, owner: user})
-			})
-			.catch(err => {
-				res.redirect('error?message=' + err.message)
-			})
+			response.listing = listing;
+			return controllers.user.getById(listing.owner)
+		})
+		.then(owner => {
+			response.owner = owner;
+			res.render('listing', response)
 		})
 		.catch(err => {
 			res.redirect('/error?message=' + err.message)
@@ -269,30 +241,26 @@ router.get('/listing/:slug', (req, res) => {
 
 	controllers.user.getById(req.vertexSession.user.id)
 	.then(user => {
-		controllers.listing.get({slug:req.params.slug})
-		.then(data => {
-			if (data.length == 0){ // not found, throw error
-				throw new Error('Listing not found.')
-				return
-			}
+		response.user = user;
+		return controllers.listing.get({slug:req.params.slug})
+	})
+	.then(data => {
+		if (data.length == 0){ // not found, throw error
+			throw new Error('Listing not found.')
+			return
+		}
 
-			const listing = data[0];
-			controllers.user.getById(listing.owner)
-			.then(owner => {
-				res.render('listing', {listing: listing, owner: owner, user: user})
-			})
-			.catch(err => {
-				res.redirect('error?message=' + err.message)
-			})
-		})
-		.catch(err => {
-			res.redirect('/error?message=' + err.message)
-		})
+		const listing = data[0];
+		response.listing = listing
+		return controllers.user.getById(listing.owner)
+	})
+	.then(owner => {
+		response.owner = owner;
+		res.render('listing', response)
 	})
 	.catch(err => {
 		res.redirect('/error?message=' + err.message)
 	})
-
 })
 
 router.get('/pricing', (req, res) => {

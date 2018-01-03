@@ -27,19 +27,9 @@
 								<div class="col-fs-6">
 									<div class="input-with-icon">
 										<i class="sl sl-icon-magnifier"></i>
-										<input type="text" placeholder="What are you looking for?" value=""/>
+										<input type="text" placeholder="What are you looking for?" value="" id="search">
 									</div>
 								</div>
-
-								<!-- Main Search Input -->
-								<div class="col-fs-6">
-									<div class="input-with-icon location">
-							
-										<input type="text" placeholder="Destination, city, address" value=""/>
-										<a href="#"><i class="fa fa-dot-circle-o"></i></a>
-									</div>
-								</div>
-						
 
 								<!-- Filters -->
 								<div class="col-fs-12">
@@ -156,88 +146,88 @@
 			<!-- Search / End -->
 
 
-		<section class="listings-container margin-top-30">
-			<!-- Sorting / Layout Switcher -->
-			<div class="row fs-switcher">
+			<section class="listings-container margin-top-30">
+				<!-- Sorting / Layout Switcher -->
+				<div class="row fs-switcher">
 
-				<div class="col-md-6">
-					<!-- Showing Results -->
-					<p class="showing-results">14 Results Found </p>
-				</div>
-
-			</div>
-
-
-			<!-- Listings -->
-			<div class="row fs-listings">
-				
-				{{#listings}}
-				<!-- Listing Item -->
-				<div class="col-lg-12 col-md-12">
-					<div class="listing-item-container list-layout" data-marker-id="{{@index}}">
-						<a href="/listing/{{slug}}" class="listing-item">
-							
-							<!-- Image -->
-							<div class="listing-item-image">
-								<img src="{{#images.length}}{{images.0}}{{/images.length}}{{^images.length}}{{cdn}}/images/listing-item-01.jpg{{/images.length}}" alt="">
-								<span class="tag">{{category}}</span>
-							</div>
-							
-							<!-- Content -->
-							<div class="listing-item-content">
-								<!-- You can use this ribbon to display some info about the listing -->
-								<!-- <div class="listing-badge now-open">Now Open</div> -->
-
-								<div class="listing-item-inner">
-									<h3>{{name}}</h3>
-									<span>{{address}}, {{city}}</span>
-									<div class="star-rating" data-rating="3.5">
-										<div class="rating-counter">(12 reviews)</div>
-									</div>
-								</div>
-
-								<span class="like-icon"></span>
-							</div>
-						</a>
+					<div class="col-md-6">
+						<!-- Showing Results -->
+						<p id="showing-results">{{ results }} Results Found </p>
 					</div>
+
 				</div>
-				<!-- Listing Item / End -->
-				{{/listings}}
-
-			</div>
-			<!-- Listings Container / End -->
 
 
-			<!-- Pagination Container -->
-			<!-- Uncomment to add pagination -->
-			<!-- <div class="row fs-listings">
-				<div class="col-md-12">
+				<!-- Listings -->
+				<div class="row fs-listings">
+					
+					{{#listings}}
+					<!-- Listing Item -->
+					<div class="col-lg-12 col-md-12 listing" data-keywords="{{ keywords }}">
+						<div class="listing-item-container list-layout" data-marker-id="{{@index}}">
+							<a href="/listing/{{slug}}" class="listing-item">
+								
+								<!-- Image -->
+								<div class="listing-item-image">
+									<img src="{{#images.length}}{{images.0}}{{/images.length}}{{^images.length}}{{cdn}}/images/listing-item-01.jpg{{/images.length}}" alt="">
+									<span class="tag">{{category}}</span>
+								</div>
+								
+								<!-- Content -->
+								<div class="listing-item-content">
+									<!-- You can use this ribbon to display some info about the listing -->
+									<!-- <div class="listing-badge now-open">Now Open</div> -->
 
-					<div class="clearfix"></div>
-					<div class="row">
-						<div class="col-md-12">
-							<div class="pagination-container margin-top-15 margin-bottom-40">
-								<nav class="pagination">
-									<ul>
-										<li><a href="#" class="current-page">1</a></li>
-										<li><a href="#">2</a></li>
-										<li><a href="#">3</a></li>
-										<li><a href="#"><i class="sl sl-icon-arrow-right"></i></a></li>
-									</ul>
-								</nav>
-							</div>
+									<div class="listing-item-inner">
+										<h3>{{name}}</h3>
+										<span>{{address}}, {{city}}</span>
+										<div class="star-rating" data-rating="3.5">
+											<div class="rating-counter">(12 reviews)</div>
+										</div>
+									</div>
+
+									<span class="like-icon"></span>
+								</div>
+							</a>
 						</div>
 					</div>
-					<div class="clearfix"></div>
-
-					
-
-					<div class="copyrights margin-top-0">© 2017 Listeo. All Rights Reserved.</div>
+					<!-- Listing Item / End -->
+					{{/listings}}
 
 				</div>
-			</div> -->
-			<!-- Pagination Container / End -->
-		</section>
+				<!-- Listings Container / End -->
+
+
+				<!-- Pagination Container -->
+				<!-- Uncomment to add pagination -->
+				<!-- <div class="row fs-listings">
+					<div class="col-md-12">
+
+						<div class="clearfix"></div>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="pagination-container margin-top-15 margin-bottom-40">
+									<nav class="pagination">
+										<ul>
+											<li><a href="#" class="current-page">1</a></li>
+											<li><a href="#">2</a></li>
+											<li><a href="#">3</a></li>
+											<li><a href="#"><i class="sl sl-icon-arrow-right"></i></a></li>
+										</ul>
+									</nav>
+								</div>
+							</div>
+						</div>
+						<div class="clearfix"></div>
+
+						
+
+						<div class="copyrights margin-top-0">© 2017 Listeo. All Rights Reserved.</div>
+
+					</div>
+				</div> -->
+				<!-- Pagination Container / End -->
+			</section>
 
 		</div>
 	</div>
@@ -264,7 +254,24 @@
 <script type="text/javascript" src="js/infobox.min.js"></script>
 <script type="text/javascript" src="js/markerclusterer.js"></script>
 <script type="text/javascript" src="js/maps.js"></script>
+<script type="text/javascript">
+	$('#search').on('input', (e) => {
+		filterList(e.target.value)
+	})
 
+	function filterList(value) {
+		let results = 0;
+		$.each($(".listing"), function() {
+			if ($(this).data().keywords.toLowerCase().indexOf(value)) {
+				$(this).fadeOut("fast");
+			} else {
+				results++
+				$(this).delay(200).slideDown("fast");
+			}
+		})
+		$('#showing-results').text(results + " Results Found");
+	}
+</script>
 
 </body>
 </html>

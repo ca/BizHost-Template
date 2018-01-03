@@ -22,6 +22,10 @@ const slugify = function(text){
 module.exports = {
 	get: (params) => {
 		return new Promise((resolve, reject) => {
+			
+			if (params.keyword) { console.log(params.keyword) }
+			else console.log("NO");
+
 			turbo.fetch(resource, params)
 			.then(data => {
 				resolve(data)
