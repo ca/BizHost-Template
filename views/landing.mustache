@@ -20,32 +20,26 @@
 				<div class="col-md-12">
 					<h2>{{ static.headline }}</h2>
 					<h4>{{ static.tagline }}</h4>
+					<form action="/listings">
+						<div class="main-search-input">
+							<div class="main-search-input-item">
+								<input type="text" placeholder="What are you looking for?" value="" name="query">
+							</div>
 
-					<div class="main-search-input">
+							<div class="main-search-input-item">
+								<select data-placeholder="All Categories" class="chosen-select" name="category">
+									<option>All Categories</option>	
+									<option>Shops</option>
+									<option>Hotels</option>
+									<option>Restaurants</option>
+									<option>Fitness</option>
+									<option>Events</option>
+								</select>
+							</div>
 
-						<div class="main-search-input-item">
-							<input type="text" placeholder="What are you looking for?" value=""/>
+							<button class="button">Search</button>
 						</div>
-
-						<div class="main-search-input-item location">
-							<input type="text" placeholder="Location" value=""/>
-							<a href="#"><i class="fa fa-dot-circle-o"></i></a>
-						</div>
-
-						<div class="main-search-input-item">
-							<select data-placeholder="All Categories" class="chosen-select" >
-								<option>All Categories</option>	
-								<option>Shops</option>
-								<option>Hotels</option>
-								<option>Restaurants</option>
-								<option>Fitness</option>
-								<option>Events</option>
-							</select>
-						</div>
-
-						<button class="button" onclick="window.location.href='/listings'">Search</button>
-
-					</div>
+					</form>
 				</div>
 			</div>
 		</div>
