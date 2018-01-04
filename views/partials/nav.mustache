@@ -48,6 +48,7 @@
 				<div class="header-widget">
 					{{^user}}
 						<a href="#sign-in-dialog" class="sign-in popup-with-zoom-anim"><i class="sl sl-icon-login"></i> Sign In</a>
+						<a href="#sign-in-dialog" class="sign-in popup-with-zoom-anim button border with-icon">Add Listing <i class="sl sl-icon-plus"></i></a>
 					{{/user}}
 					{{#user}}
 						<div class="user-menu">
@@ -57,8 +58,8 @@
 								<li><a href="/auth/logout"><i class="sl sl-icon-power"></i> Logout</a></li>
 							</ul>
 						</div>
+						<a href="/dashboard/listings" class="button border with-icon">Add Listing <i class="sl sl-icon-plus"></i></a>
 					{{/user}}
-					<a href="/dashboard/listings" class="button border with-icon">Add Listing <i class="sl sl-icon-plus"></i></a>
 				</div>
 			</div>
 			<!-- Right Side Content / End -->
