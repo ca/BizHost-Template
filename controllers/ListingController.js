@@ -37,6 +37,7 @@ module.exports = {
 					}
 					resolve(listings);
 				}).catch(err => { reject(err) })
+				return;
 			}
 
 			turbo.fetch(resource, params)
