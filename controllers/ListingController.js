@@ -30,7 +30,9 @@ module.exports = {
 					let listings = [];
 					for (i=0; i<data.length; i++) {
 						for (j=0; j<search.length; j++) {
-							if (!data[i].keywords.toLowerCase().indexOf(search[j])) listings.push(data[i]);
+							if ((data[i].keywords.toLowerCase().indexOf(search[j]) >= 0)) {
+								if (listings.indexOf(data[i]) == -1) listings.push(data[i]);
+							}
 						}
 					}
 					resolve(listings);

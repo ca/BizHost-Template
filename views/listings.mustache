@@ -262,7 +262,7 @@
 	function filterList(value) {
 		let results = 0;
 		$.each($(".listing"), function() {
-			if ($(this).data().keywords.toLowerCase().indexOf(value)) {
+			if (!($(this).data().keywords.toLowerCase().indexOf(value) >= 0)) {
 				$(this).fadeOut("fast");
 			} else {
 				results++
