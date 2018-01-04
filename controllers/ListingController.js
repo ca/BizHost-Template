@@ -22,9 +22,20 @@ const slugify = function(text){
 module.exports = {
 	get: (params) => {
 		return new Promise((resolve, reject) => {
-			
-			if (params.keyword) { console.log(params.keyword) }
-			else console.log("NO");
+			// For search
+			if (params.query) {
+				let search = params.query.split(' ');
+				turbo.fetch(resource, null)
+				.then(data => {
+					let listings = [];
+					for (i=0; i<data.length; i++) {
+						for (j=0; j<search.length; j++) {
+							if (!data[i].keywords.toLowerCase().indexOf(search[j])) listings.push(data[i]);
+						}
+					}
+					resolve(listings);
+				}).catch(err => { reject(err) })
+			}
 
 			turbo.fetch(resource, params)
 			.then(data => {
@@ -45,6 +56,12 @@ module.exports = {
 			.catch(err => {
 				reject(new Error(resource + ' ' + id + ' not found'))
 			})
+		})
+	},
+
+	search: () => {
+		return new Promise((resolve, reject) => {
+			turbo.fetch
 		})
 	},
 
