@@ -3,17 +3,9 @@ var infoBox_ratingType = 'star-rating';
 
 (function($){
     "use strict";
-
-    function mainMap() {
-
-      // Locations
-      // ----------------------------------------------- //
-      var ib = new InfoBox();
-
-      // Infobox Output
-      function locationData(locationURL,locationImg,locationTitle, locationAddress, locationRating, locationRatingCounter) {
+    function locationData(locationURL,locationImg,locationTitle, locationAddress, locationRating, locationRatingCounter) {
           return(''+
-            '<a href="'+ locationURL +'" class="listing-img-container">'+
+            '<a href="/listing/'+ locationURL +'" class="listing-img-container">'+
                '<div class="infoBox-close"><i class="fa fa-times"></i></div>'+
                '<img src="'+locationImg+'" alt="">'+
 
@@ -29,272 +21,298 @@ var infoBox_ratingType = 'star-rating';
                   '<div class="'+infoBox_ratingType+'" data-rating="'+locationRating+'"><div class="rating-counter">('+locationRatingCounter+' reviews)</div></div>'+
                '</div>'+
             '</div>')
-      }
+    }
+
+    async function addLocations () {
+      var locations = [];
+
+      $.each(md, async (index, listing) => {
+        var geocoder = new google.maps.Geocoder();
+        await geocoder.geocode({
+          'address': listing.address+', '+listing.city+', '+listing.state
+        }, (results, status) => {
+          if (status == google.maps.GeocoderStatus.OK) {
+            let position = results[0].geometry.location
+            var location = []
+            // map tooltip
+            location.push(locationData(listing.slug, listing.name, listing.address+', '+listing.city, '3.5', '12'))
+            location.push(position.lat())
+            location.push(position.lng())
+            location.push(index) // index
+            location.push('<i class="im im-icon-Chef-Hat"></i>') //icon
+            locations.push(location)
+          }
+        })
+      })
+      return locations;
+    }
+
+    async function mainMap() {
 
       // Locations
-      var locations = [
-        [ locationData('listings-single-page.html','images/listing-item-01.jpg',"Tom's Restaurant",'964 School Street, New York', '3.5', '12'), 40.94401669296697, -74.16938781738281, 1, '<i class="im im-icon-Chef-Hat"></i>'],
-        [ locationData('listings-single-page.html','images/listing-item-02.jpg','Sticky Band','Bishop Avenue, New York', '5.0', '23'), 40.77055783505125, -74.26002502441406,          2, '<i class="im im-icon-Electric-Guitar"></i>'],
-        [ locationData('listings-single-page.html','images/listing-item-03.jpg','Hotel Govendor','778 Country Street, New York', '2.0', '17'), 40.7427837, -73.11445617675781,         3, '<i class="im im-icon-Home-2"></i>' ],
-        [ locationData('listings-single-page.html','images/listing-item-04.jpg','Burger House','2726 Shinn Street, New York', '5.0', '31'), 40.70437865245596, -73.98674011230469,     4, '<i class="im im-icon-Hamburger"></i>' ],
-        [ locationData('listings-single-page.html','images/listing-item-05.jpg','Airport','1512 Duncan Avenue, New York', '3.5', '46'), 40.641311, -73.778139,                         5, '<i class="im im-icon-Plane"></i>'],
-        [ locationData('listings-single-page.html','images/listing-item-06.jpg','Think Coffee','215 Terry Lane, New York', '4.5', '15'), 41.080938, -73.535957,                        6, '<i class="im im-icon-Coffee"></i>'],
-        [ locationData('listings-single-page.html','images/listing-item-04.jpg','Burger House','2726 Shinn Street, New York', '5.0', '31'), 41.079386, -73.519478,                     7, '<i class="im im-icon-Hamburger"></i>'],
-
-        [ locationData('listings-single-page.html','images/listing-item-04.jpg','Burger House','2726 Shinn Street, New York', '5.0', '31'), 52.368630, 4.895782,                     7, '<i class="im im-icon-Hamburger"></i>'],
-        [ locationData('listings-single-page.html','images/listing-item-04.jpg','Burger House','2726 Shinn Street, New York', '5.0', '31'), 52.350179, 4.634857,                     7, '<i class="im im-icon-Hamburger"></i>'],
-      ];
-
-      // Chosen Rating Type
-      google.maps.event.addListener(ib,'domready',function(){
-         if (infoBox_ratingType = 'numerical-rating') {
-            numericalRating('.infoBox .'+infoBox_ratingType+'');
-         }
-         if (infoBox_ratingType = 'star-rating') {
-            starRating('.infoBox .'+infoBox_ratingType+'');
-         }
-      });
-
-
-
-      // Map Attributes
       // ----------------------------------------------- //
+      var ib = new InfoBox();
 
-      var mapZoomAttr = $('#map').attr('data-map-zoom');
-      var mapScrollAttr = $('#map').attr('data-map-scroll');
+      
+      var locations = [];
 
-      if (typeof mapZoomAttr !== typeof undefined && mapZoomAttr !== false) {
-          var zoomLevel = parseInt(mapZoomAttr);
-      } else {
-          var zoomLevel = 5;
-      }
-
-      if (typeof mapScrollAttr !== typeof undefined && mapScrollAttr !== false) {
-         var scrollEnabled = parseInt(mapScrollAttr);
-      } else {
-        var scrollEnabled = false;
-      }
-
-
-      // Main Map
-      var map = new google.maps.Map(document.getElementById('map'), {
-        zoom: zoomLevel,
-        scrollwheel: scrollEnabled,
-        center: new google.maps.LatLng(40.80, -73.70),
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-        zoomControl: false,
-        mapTypeControl: false,
-        scaleControl: false,
-        panControl: false,
-        navigationControl: false,
-        streetViewControl: false,
-        gestureHandling: 'cooperative',
-
-        // Google Map Style
-        styles: [{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"color":"#747474"},{"lightness":"23"}]},{"featureType":"poi.attraction","elementType":"geometry.fill","stylers":[{"color":"#f38eb0"}]},{"featureType":"poi.government","elementType":"geometry.fill","stylers":[{"color":"#ced7db"}]},{"featureType":"poi.medical","elementType":"geometry.fill","stylers":[{"color":"#ffa5a8"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#c7e5c8"}]},{"featureType":"poi.place_of_worship","elementType":"geometry.fill","stylers":[{"color":"#d6cbc7"}]},{"featureType":"poi.school","elementType":"geometry.fill","stylers":[{"color":"#c4c9e8"}]},{"featureType":"poi.sports_complex","elementType":"geometry.fill","stylers":[{"color":"#b1eaf1"}]},{"featureType":"road","elementType":"geometry","stylers":[{"lightness":"100"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"off"},{"lightness":"100"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffd4a5"}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#ffe9d2"}]},{"featureType":"road.local","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.local","elementType":"geometry.fill","stylers":[{"weight":"3.00"}]},{"featureType":"road.local","elementType":"geometry.stroke","stylers":[{"weight":"0.30"}]},{"featureType":"road.local","elementType":"labels.text","stylers":[{"visibility":"on"}]},{"featureType":"road.local","elementType":"labels.text.fill","stylers":[{"color":"#747474"},{"lightness":"36"}]},{"featureType":"road.local","elementType":"labels.text.stroke","stylers":[{"color":"#e9e5dc"},{"lightness":"30"}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"visibility":"on"},{"lightness":"100"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#d2e7f7"}]}]
-
-      });
+      await Promise.resolve(addLocations())
+      .then(loc => {
+        locations = loc
+        
+        // Chosen Rating Type
+        google.maps.event.addListener(ib,'domready',function(){
+           if (infoBox_ratingType = 'numerical-rating') {
+              numericalRating('.infoBox .'+infoBox_ratingType+'');
+           }
+           if (infoBox_ratingType = 'star-rating') {
+              starRating('.infoBox .'+infoBox_ratingType+'');
+           }
+        });
 
 
-      // Marker highlighting when hovering listing item
-      $('.listing-item-container').on('mouseover', function(){
 
-        var listingAttr = $(this).data('marker-id');
+        // Map Attributes
+        // ----------------------------------------------- //
 
-        if(listingAttr !== undefined) {
-          var listing_id = $(this).data('marker-id') - 1;
-          var marker_div = allMarkers[listing_id].div;
+        var mapZoomAttr = $('#map').attr('data-map-zoom');
+        var mapScrollAttr = $('#map').attr('data-map-scroll');
 
-          $(marker_div).addClass('clicked');
-
-          $(this).on('mouseout', function(){
-              if ($(marker_div).is(":not(.infoBox-opened)")) {
-                 $(marker_div).removeClass('clicked');
-              }
-           });
+        if (typeof mapZoomAttr !== typeof undefined && mapZoomAttr !== false) {
+            var zoomLevel = parseInt(mapZoomAttr);
+        } else {
+            var zoomLevel = 5;
         }
 
-      });
-
-
-      // Infobox
-      // ----------------------------------------------- //
-
-      var boxText = document.createElement("div");
-      boxText.className = 'map-box'
-
-      var currentInfobox;
-
-      var boxOptions = {
-              content: boxText,
-              disableAutoPan: false,
-              alignBottom : true,
-              maxWidth: 0,
-              pixelOffset: new google.maps.Size(-134, -55),
-              zIndex: null,
-              boxStyle: {
-                width: "270px"
-              },
-              closeBoxMargin: "0",
-              closeBoxURL: "",
-              infoBoxClearance: new google.maps.Size(25, 25),
-              isHidden: false,
-              pane: "floatPane",
-              enableEventPropagation: false,
-      };
-
-
-      var markerCluster, overlay, i;
-      var allMarkers = [];
-
-      var clusterStyles = [
-        {
-          textColor: 'white',
-          url: '',
-          height: 50,
-          width: 50
+        if (typeof mapScrollAttr !== typeof undefined && mapScrollAttr !== false) {
+           var scrollEnabled = parseInt(mapScrollAttr);
+        } else {
+          var scrollEnabled = false;
         }
-      ];
 
 
-      var markerIco;
-      for (i = 0; i < locations.length; i++) {
+        // Main Map
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: zoomLevel,
+          scrollwheel: scrollEnabled,
+          center: new google.maps.LatLng(40.80, -73.70),
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          zoomControl: false,
+          mapTypeControl: false,
+          scaleControl: false,
+          panControl: false,
+          navigationControl: false,
+          streetViewControl: false,
+          gestureHandling: 'cooperative',
 
-        markerIco = locations[i][4];
+          // Google Map Style
+          styles: [{"featureType":"poi","elementType":"labels.text.fill","stylers":[{"color":"#747474"},{"lightness":"23"}]},{"featureType":"poi.attraction","elementType":"geometry.fill","stylers":[{"color":"#f38eb0"}]},{"featureType":"poi.government","elementType":"geometry.fill","stylers":[{"color":"#ced7db"}]},{"featureType":"poi.medical","elementType":"geometry.fill","stylers":[{"color":"#ffa5a8"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#c7e5c8"}]},{"featureType":"poi.place_of_worship","elementType":"geometry.fill","stylers":[{"color":"#d6cbc7"}]},{"featureType":"poi.school","elementType":"geometry.fill","stylers":[{"color":"#c4c9e8"}]},{"featureType":"poi.sports_complex","elementType":"geometry.fill","stylers":[{"color":"#b1eaf1"}]},{"featureType":"road","elementType":"geometry","stylers":[{"lightness":"100"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"off"},{"lightness":"100"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#ffd4a5"}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#ffe9d2"}]},{"featureType":"road.local","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.local","elementType":"geometry.fill","stylers":[{"weight":"3.00"}]},{"featureType":"road.local","elementType":"geometry.stroke","stylers":[{"weight":"0.30"}]},{"featureType":"road.local","elementType":"labels.text","stylers":[{"visibility":"on"}]},{"featureType":"road.local","elementType":"labels.text.fill","stylers":[{"color":"#747474"},{"lightness":"36"}]},{"featureType":"road.local","elementType":"labels.text.stroke","stylers":[{"color":"#e9e5dc"},{"lightness":"30"}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"visibility":"on"},{"lightness":"100"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#d2e7f7"}]}]
 
-        var overlaypositions = new google.maps.LatLng(locations[i][1], locations[i][2]),
+        });
 
-        overlay = new CustomMarker(
-         overlaypositions,
-          map,
+
+        // Marker highlighting when hovering listing item
+        $('.listing-item-container').on('mouseover', function(){
+
+          var listingAttr = $(this).data('marker-id');
+
+          if(listingAttr !== undefined) {
+            var listing_id = $(this).data('marker-id') - 1;
+            var marker_div = allMarkers[listing_id].div;
+
+            $(marker_div).addClass('clicked');
+
+            $(this).on('mouseout', function(){
+                if ($(marker_div).is(":not(.infoBox-opened)")) {
+                   $(marker_div).removeClass('clicked');
+                }
+             });
+          }
+
+        });
+
+
+        // Infobox
+        // ----------------------------------------------- //
+
+        var boxText = document.createElement("div");
+        boxText.className = 'map-box'
+
+        var currentInfobox;
+
+        var boxOptions = {
+                content: boxText,
+                disableAutoPan: false,
+                alignBottom : true,
+                maxWidth: 0,
+                pixelOffset: new google.maps.Size(-134, -55),
+                zIndex: null,
+                boxStyle: {
+                  width: "270px"
+                },
+                closeBoxMargin: "0",
+                closeBoxURL: "",
+                infoBoxClearance: new google.maps.Size(25, 25),
+                isHidden: false,
+                pane: "floatPane",
+                enableEventPropagation: false,
+        };
+
+
+        var markerCluster, overlay, i;
+        var allMarkers = [];
+
+        var clusterStyles = [
           {
-            marker_id: i
-          },
-          markerIco
-        );
-
-        allMarkers.push(overlay);
-
-        google.maps.event.addDomListener(overlay, 'click', (function(overlay, i) {
-
-          return function() {
-             ib.setOptions(boxOptions);
-             boxText.innerHTML = locations[i][0];
-             ib.open(map, overlay);
-
-             currentInfobox = locations[i][3];
-             // var latLng = new google.maps.LatLng(locations[i][1], locations[i][2]);
-             // map.panTo(latLng);
-             // map.panBy(0,-90);
+            textColor: 'white',
+            url: '',
+            height: 50,
+            width: 50
+          }
+        ];
 
 
-            google.maps.event.addListener(ib,'domready',function(){
-              $('.infoBox-close').click(function(e) {
-                  e.preventDefault();
-                  ib.close();
-                  $('.map-marker-container').removeClass('clicked infoBox-opened');
+        var markerIco;
+        for (i = 0; i < locations.length; i++) {
+
+          markerIco = locations[i][4];
+
+          var overlaypositions = new google.maps.LatLng(locations[i][1], locations[i][2]),
+
+          overlay = new CustomMarker(
+           overlaypositions,
+            map,
+            {
+              marker_id: i
+            },
+            markerIco
+          );
+
+          allMarkers.push(overlay);
+
+          google.maps.event.addDomListener(overlay, 'click', (function(overlay, i) {
+
+            return function() {
+               ib.setOptions(boxOptions);
+               boxText.innerHTML = locations[i][0];
+               ib.open(map, overlay);
+
+               currentInfobox = locations[i][3];
+               // var latLng = new google.maps.LatLng(locations[i][1], locations[i][2]);
+               // map.panTo(latLng);
+               // map.panBy(0,-90);
+
+
+              google.maps.event.addListener(ib,'domready',function(){
+                $('.infoBox-close').click(function(e) {
+                    e.preventDefault();
+                    ib.close();
+                    $('.map-marker-container').removeClass('clicked infoBox-opened');
+                });
+
               });
 
+            }
+          })(overlay, i));
+
+        }
+
+
+        // Marker Clusterer Init
+        // ----------------------------------------------- //
+
+        var options = {
+            imagePath: 'images/',
+            styles : clusterStyles,
+            minClusterSize : 2
+        };
+
+        markerCluster = new MarkerClusterer(map, allMarkers, options);
+
+        google.maps.event.addDomListener(window, "resize", function() {
+            var center = map.getCenter();
+            google.maps.event.trigger(map, "resize");
+            map.setCenter(center);
+        });
+
+
+
+        // Custom User Interface Elements
+        // ----------------------------------------------- //
+
+        // Custom Zoom-In and Zoom-Out Buttons
+          var zoomControlDiv = document.createElement('div');
+          var zoomControl = new ZoomControl(zoomControlDiv, map);
+
+          function ZoomControl(controlDiv, map) {
+
+            zoomControlDiv.index = 1;
+            map.controls[google.maps.ControlPosition.RIGHT_CENTER].push(zoomControlDiv);
+            // Creating divs & styles for custom zoom control
+            controlDiv.style.padding = '5px';
+            controlDiv.className = "zoomControlWrapper";
+
+            // Set CSS for the control wrapper
+            var controlWrapper = document.createElement('div');
+            controlDiv.appendChild(controlWrapper);
+
+            // Set CSS for the zoomIn
+            var zoomInButton = document.createElement('div');
+            zoomInButton.className = "custom-zoom-in";
+            controlWrapper.appendChild(zoomInButton);
+
+            // Set CSS for the zoomOut
+            var zoomOutButton = document.createElement('div');
+            zoomOutButton.className = "custom-zoom-out";
+            controlWrapper.appendChild(zoomOutButton);
+
+            // Setup the click event listener - zoomIn
+            google.maps.event.addDomListener(zoomInButton, 'click', function() {
+              map.setZoom(map.getZoom() + 1);
             });
 
-          }
-        })(overlay, i));
+            // Setup the click event listener - zoomOut
+            google.maps.event.addDomListener(zoomOutButton, 'click', function() {
+              map.setZoom(map.getZoom() - 1);
+            });
 
-      }
-
-
-      // Marker Clusterer Init
-      // ----------------------------------------------- //
-
-      var options = {
-          imagePath: 'images/',
-          styles : clusterStyles,
-          minClusterSize : 2
-      };
-
-      markerCluster = new MarkerClusterer(map, allMarkers, options);
-
-      google.maps.event.addDomListener(window, "resize", function() {
-          var center = map.getCenter();
-          google.maps.event.trigger(map, "resize");
-          map.setCenter(center);
-      });
+        }
 
 
+        // Scroll enabling button
+        var scrollEnabling = $('#scrollEnabling');
 
-      // Custom User Interface Elements
-      // ----------------------------------------------- //
+        $(scrollEnabling).click(function(e){
+            e.preventDefault();
+            $(this).toggleClass("enabled");
 
-      // Custom Zoom-In and Zoom-Out Buttons
-        var zoomControlDiv = document.createElement('div');
-        var zoomControl = new ZoomControl(zoomControlDiv, map);
-
-        function ZoomControl(controlDiv, map) {
-
-          zoomControlDiv.index = 1;
-          map.controls[google.maps.ControlPosition.RIGHT_CENTER].push(zoomControlDiv);
-          // Creating divs & styles for custom zoom control
-          controlDiv.style.padding = '5px';
-          controlDiv.className = "zoomControlWrapper";
-
-          // Set CSS for the control wrapper
-          var controlWrapper = document.createElement('div');
-          controlDiv.appendChild(controlWrapper);
-
-          // Set CSS for the zoomIn
-          var zoomInButton = document.createElement('div');
-          zoomInButton.className = "custom-zoom-in";
-          controlWrapper.appendChild(zoomInButton);
-
-          // Set CSS for the zoomOut
-          var zoomOutButton = document.createElement('div');
-          zoomOutButton.className = "custom-zoom-out";
-          controlWrapper.appendChild(zoomOutButton);
-
-          // Setup the click event listener - zoomIn
-          google.maps.event.addDomListener(zoomInButton, 'click', function() {
-            map.setZoom(map.getZoom() + 1);
-          });
-
-          // Setup the click event listener - zoomOut
-          google.maps.event.addDomListener(zoomOutButton, 'click', function() {
-            map.setZoom(map.getZoom() - 1);
-          });
-
-      }
+            if ( $(this).is(".enabled") ) {
+               map.setOptions({'scrollwheel': true});
+            } else {
+               map.setOptions({'scrollwheel': false});
+            }
+        })
 
 
-      // Scroll enabling button
-      var scrollEnabling = $('#scrollEnabling');
+        // Geo Location Button
+        $("#geoLocation, .input-with-icon.location a").click(function(e){
+            e.preventDefault();
+            geolocate();
+        });
 
-      $(scrollEnabling).click(function(e){
-          e.preventDefault();
-          $(this).toggleClass("enabled");
+        function geolocate() {
 
-          if ( $(this).is(".enabled") ) {
-             map.setOptions({'scrollwheel': true});
-          } else {
-             map.setOptions({'scrollwheel': false});
-          }
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+                    map.setCenter(pos);
+                    map.setZoom(12);
+                });
+            }
+        }
       })
 
-
-      // Geo Location Button
-      $("#geoLocation, .input-with-icon.location a").click(function(e){
-          e.preventDefault();
-          geolocate();
-      });
-
-      function geolocate() {
-
-          if (navigator.geolocation) {
-              navigator.geolocation.getCurrentPosition(function (position) {
-                  var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-                  map.setCenter(pos);
-                  map.setZoom(12);
-              });
-          }
-      }
+      console.log(locations)
 
     }
 

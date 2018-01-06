@@ -192,7 +192,7 @@ router.get('/listings', (req, res) => {
 	if (!req.vertexSession || !req.vertexSession.user){ // user not logged in, redirect to error page:
 		controllers.listing.get(req.query)
 		.then(data => {
-			res.render('listings', {listings: data, user: null})
+			res.render('listings', {listings: data, mapData: JSON.stringify(data), user: null})
 		})
 		.catch(err => {
 			res.redirect('/error?message=' + err.message)
@@ -207,7 +207,7 @@ router.get('/listings', (req, res) => {
 	})
 	.then(listings => {
 		response.listings = listings;
-		response.results = listings.length;
+		response.mapData = JSON.stringify(listings);
 		res.render('listings', response)
 	})
 	.catch(err => {
