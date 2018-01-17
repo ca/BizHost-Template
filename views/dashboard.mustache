@@ -156,7 +156,9 @@
 				var file = data.result
 				$.post("/auth/update",
 						{ image: file.url },
-						function(data) {}
+						function(data) {
+							alert("Your photo was updated.")
+						}
 				);
 
 				$('#user-image').attr('src', file.url)
